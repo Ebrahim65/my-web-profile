@@ -16,10 +16,18 @@ document.addEventListener('DOMContentLoaded', function () {
     // Mobile Menu Toggle
     const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
+    const themeToggle = document.querySelector('.theme-toggle');
 
     hamburger.addEventListener('click', () => {
         hamburger.classList.toggle('active');
         navLinks.classList.toggle('active');
+        
+        // Toggle theme toggle visibility when menu is open
+        if (navLinks.classList.contains('active')) {
+            themeToggle.style.display = 'none';
+        } else {
+            themeToggle.style.display = 'block';
+        }
     });
 
     // Close mobile menu when clicking a link
@@ -34,14 +42,17 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
-
             const targetId = this.getAttribute('href');
-            if (targetId === '#') return; // Skip empty hash links
-
+            if (targetId === '#') return;
+            
             const targetElement = document.querySelector(targetId);
             if (targetElement) {
+                const offset = 80; // Height of your navbar
+                const elementPosition = targetElement.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - offset;
+                
                 window.scrollTo({
-                    top: targetElement.offsetTop - 80,
+                    top: offsetPosition,
                     behavior: 'smooth'
                 });
             }
